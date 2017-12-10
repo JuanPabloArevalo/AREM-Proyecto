@@ -74,6 +74,16 @@ Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, e);
     
     @RequestMapping("/db")
     String db2(Map<String, Object> model) {
+                    try (Connection connection = dataSource.getConnection()) {
+                Statement stmt = connection.createStatement();
+                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255))");
+            
+                
+            } catch (Exception e) {
+                model.put("message", e.getMessage());
+                return "error";
+            }
+                    
         try (Connection connection = dataSource.getConnection()) {
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT nombre FROM Reporte");
