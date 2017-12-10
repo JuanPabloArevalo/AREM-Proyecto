@@ -77,7 +77,8 @@ Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, e);
                     try (Connection connection = dataSource.getConnection()) {
                 Statement stmt = connection.createStatement();
                 stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255))");
-            
+                stmt.executeUpdate("INSERT INTO Reporte (fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable) VALUES ('1','2','3','4','5','6','7','8')");
+        
                 
             } catch (Exception e) {
                 model.put("message", e.getMessage());
