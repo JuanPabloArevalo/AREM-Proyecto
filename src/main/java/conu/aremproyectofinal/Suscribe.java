@@ -110,7 +110,7 @@ public class Suscribe {
     public static void main(String[] args) throws Exception { 
 //         
          Suscribe suscribe = new Suscribe();
-         suscribe.create("publisher-multipleconsumers2", "publishsubscribe.t");
+         suscribe.create("publisher-multipleconsumers1", "publishsubscribe.t");
          
          try {
              while(true){
