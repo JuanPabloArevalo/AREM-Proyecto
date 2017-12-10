@@ -87,8 +87,10 @@ Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, e);
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT cliente FROM Reporte");
         ArrayList<String> output = new ArrayList<String>();
+        
+        
         while (rs.next()) {
-            output.add("Logs: " + rs.getString("cliente"));
+            output.add("fecha:"+rs.getString("fecha")+",errorDesarrollo:"+rs.getString("errorDesarrollo")+",capacitacion:"+rs.getString("capacitacion")+",pais:"+rs.getString("pais")+",configuracion:"+rs.getString("configuracion")+",tipo:"+rs.getString("tipo")+",cliente:"+rs.getString("cliente")+",responsable:"+rs.getString("responsable")+"");
         }
         model.put("records", output);
         return "db";
