@@ -85,7 +85,7 @@ Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, e);
                     
         try (Connection connection = dataSource.getConnection()) {
         Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT cliente FROM Reporte");
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Reporte");
         ArrayList<String> output = new ArrayList<String>();
         
         
