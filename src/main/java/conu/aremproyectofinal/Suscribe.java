@@ -104,21 +104,4 @@ public class Suscribe {
         System.out.println("Mensaje recibido: "+greeting);
         return greeting;
     }
-
-    
-    
-    public static void main(String[] args) throws Exception { 
-//         
-         Suscribe suscribe = new Suscribe();
-         suscribe.create("publisher-multipleconsumers1", "publishsubscribe.t");
-         
-         try {
-             while(true){
-                    String greeting1 = suscribe.getGreeting(1000);
-             }
-
-        } catch (JMSException e) {
-        }
-         
-     }
 }
