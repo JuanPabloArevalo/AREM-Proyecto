@@ -69,9 +69,36 @@ public class Suscribe {
             // create greeting
             greeting = "Hello " + text + "!";
             JSONObject objetoJson = new JSONObject(text);
-            System.out.println("JSonOcject: "+objetoJson);
-            System.out.println("JSonOcject: "+objetoJson.getString("nombre"));
             
+            String fecha = objetoJson.getString("fecha");
+            String errorDesarrollo = objetoJson.getString("errorDesarrollo");
+            if(errorDesarrollo==null || errorDesarrollo.equals("null") || errorDesarrollo.equals("false")){
+                errorDesarrollo = "No";
+            }
+            else{
+                errorDesarrollo = "Si";
+            }
+            String capacitacion = objetoJson.getString("capacitacion");
+            if(capacitacion==null || capacitacion.equals("null") || capacitacion.equals("false")){
+                capacitacion = "No";
+            }
+            else{
+                capacitacion = "Si";
+            }
+            String pais = objetoJson.getString("pais");
+            String configuracion = objetoJson.getString("configuracion");
+            if(configuracion==null || configuracion.equals("null") || configuracion.equals("false")){
+                configuracion = "No";
+            }
+            else{
+                configuracion = "Si";
+            }
+            String tipo = objetoJson.getString("tipo");
+            String cliente = objetoJson.getString("cliente");
+            String responsable = objetoJson.getString("responsable");
+            
+            Reporte reporte = new Reporte(fecha, errorDesarrollo, capacitacion, pais, configuracion, tipo, cliente, responsable);
+            reporte.insertar();
         } else {
         }
         System.out.println("Mensaje recibido: "+greeting);
@@ -83,7 +110,7 @@ public class Suscribe {
     public static void main(String[] args) throws Exception { 
 //         
          Suscribe suscribe = new Suscribe();
-         suscribe.create("publisher-multipleconsumers", "publishsubscribe.t");
+         suscribe.create("publisher-multipleconsumers2", "publishsubscribe.t");
          
          try {
              while(true){
