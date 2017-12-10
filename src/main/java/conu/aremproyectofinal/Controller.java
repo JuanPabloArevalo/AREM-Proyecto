@@ -86,10 +86,10 @@ Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, e);
                     
         try (Connection connection = dataSource.getConnection()) {
         Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT nombre FROM Reporte");
+        ResultSet rs = stmt.executeQuery("SELECT cliente FROM Reporte");
         ArrayList<String> output = new ArrayList<String>();
         while (rs.next()) {
-            output.add("Logs: " + rs.getString("nombre"));
+            output.add("Logs: " + rs.getString("cliente"));
         }
         model.put("records", output);
         return "db";
