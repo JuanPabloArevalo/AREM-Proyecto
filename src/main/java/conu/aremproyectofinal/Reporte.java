@@ -8,6 +8,8 @@ package conu.aremproyectofinal;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,11 +36,6 @@ public class Reporte {
     private String tipo;
     private String cliente;
     private String responsable;
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
-
-    @Autowired
-    private DataSource dataSource;
 
     public Reporte(){
         
@@ -168,37 +165,114 @@ public class Reporte {
     }
     
     
-    public void insertar(){
-        try (Connection connection = dataSource.getConnection()) {
-            Statement stmt = connection.createStatement();    
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255))");
-            stmt.executeUpdate("INSERT INTO Reporte (fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable) VALUES ('"+fecha+"','"+errorDesarrollo+"','"+capacitacion+"','"+pais+"','"+configuracion+"','"+tipo+"','"+cliente+"','"+responsable+"')");
-        } catch (Exception e) {
-           e.printStackTrace();
+    public void insertar() throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException{
+                String connectionString
+                = "jdbc:sqlserver://proyectoconu.database.windows.net:1433;"
+                + "database=BaseDatosBackend;"
+                + "user=adminBD@proyectoconu;"
+                + "password=Ab1234567890.;"
+                + "encrypt=false;"
+                + "trustServerCertificate=false;"
+                + "hostNameInCertificate=*.database.windows.net;"
+                + "loginTimeout=30;";
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        PreparedStatement prepsInsertProduct = null;
+        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        Class.forName(driver).newInstance();
+        connection = DriverManager.getConnection(connectionString);
+        String insertSql = "INSERT INTO Reporte (fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable) VALUES ('"+fecha+"','"+errorDesarrollo+"','"+capacitacion+"','"+pais+"','"+configuracion+"','"+tipo+"','"+cliente+"','"+responsable+"');";
+//        String insertSql = "CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255));";
+        
+        prepsInsertProduct = connection.prepareStatement(insertSql,Statement.RETURN_GENERATED_KEYS);
+//        stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255))");
+//        stmt.executeUpdate("INSERT INTO Reporte (fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable) VALUES ('"+fecha+"','"+errorDesarrollo+"','"+capacitacion+"','"+pais+"','"+configuracion+"','"+tipo+"','"+cliente+"','"+responsable+"')");
+        prepsInsertProduct.execute();
+        resultSet = prepsInsertProduct.getGeneratedKeys();
+        while (resultSet.next()) {
+            System.out.println("Generated: " + resultSet.getString(1));
+        } 
+        if (prepsInsertProduct != null) {
+            prepsInsertProduct.close();
         }
+        if (resultSet != null) {
+            resultSet.close();
+        }
+        if (statement != null) {
+                statement.close();
+        }
+        if (connection != null) {
+            connection.close();
+        }
+        
+        
+        
+        
+        
+        
+//        try (Connection connection = dataSource.getConnection()) {
+//            Statement stmt = connection.createStatement();    
+//            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Reporte (fecha varchar(255),errorDesarrollo varchar(255),capacitacion varchar(255),pais varchar(255),configuracion varchar(255),tipo varchar(255) ,cliente varchar(255),responsable varchar(255))");
+//            stmt.executeUpdate("INSERT INTO Reporte (fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable) VALUES ('"+fecha+"','"+errorDesarrollo+"','"+capacitacion+"','"+pais+"','"+configuracion+"','"+tipo+"','"+cliente+"','"+responsable+"')");
+//        } catch (Exception e) {
+//           e.printStackTrace();
+//        }
     }
     
-    public Set<Reporte> getAll() throws SQLException{
-        Set<Reporte> arreglo = new HashSet<>();
-        Connection connection = dataSource.getConnection();
-        Statement stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable FROM Reporte");
-        ArrayList<String> output = new ArrayList<>();
-        while (rs.next()) {
-            arreglo.add(new Reporte(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
-        }
-        return arreglo;
+    public Set<Reporte> getAll() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+            String connectionString
+        = "jdbc:sqlserver://proyectoconu.database.windows.net:1433;"
+        + "database=BaseDatosBackend;"
+        + "user=adminBD@proyectoconu;"
+        + "password=Ab1234567890.;"
+        + "encrypt=false;"
+        + "trustServerCertificate=false;"
+        + "hostNameInCertificate=*.database.windows.net;"
+        + "loginTimeout=30;";
+
+        // Declare the JDBC objects.  
+        Connection connection = null;  
+        Statement statement = null;   
+        ResultSet resultSet = null;  
+        String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+        Class.forName(driver).newInstance();
+        connection = DriverManager.getConnection(connectionString);  
+
+        // Create and execute a SELECT SQL statement.  
+
+        String selectSql = "SELECT fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable FROM Reporte";  
+        statement = connection.createStatement();  
+        resultSet = statement.executeQuery(selectSql);  
+
+            // Print results from select statement  
+        Set<Reporte> reportes = new HashSet<>();
+        Reporte reporte;
+        while (resultSet.next()){  
+            reporte = new Reporte(resultSet.getString(1),resultSet.getString(2), resultSet.getString(3), resultSet.getString(4), resultSet.getString(5), resultSet.getString(6), resultSet.getString(7), resultSet.getString(8));
+            reportes.add(reporte);
+        }  
+            // Close the connections after the data has been handled.  
+        if (resultSet != null)  { resultSet.close(); }  
+        if (statement != null) { statement.close(); } 
+        if (connection != null)  { connection.close(); }  
+        
+        return reportes;
+        
+        
+        
+        
+//        Set<Reporte> arreglo = new HashSet<>();
+//        Connection connection = dataSource.getConnection();
+//        Statement stmt = connection.createStatement();
+//        ResultSet rs = stmt.executeQuery("SELECT fecha,errorDesarrollo,capacitacion,pais,configuracion,tipo,cliente,responsable FROM Reporte");
+//        ArrayList<String> output = new ArrayList<>();
+//        while (rs.next()) {
+//            arreglo.add(new Reporte(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+//        }
+//        return arreglo;
     }   
     
-    @Bean
-    public DataSource dataSource() throws SQLException {
-        if (dbUrl == null || dbUrl.isEmpty()) {
-            return new HikariDataSource();
-        } else {
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(dbUrl);
-            return new HikariDataSource(config);
-        }
-    }
+
     
 }

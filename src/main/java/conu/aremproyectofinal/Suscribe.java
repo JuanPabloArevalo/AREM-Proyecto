@@ -5,6 +5,7 @@
  */
 package conu.aremproyectofinal;
 
+import java.sql.SQLException;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -56,7 +57,7 @@ public class Suscribe {
         connection.close();
     }
 
-    public String getGreeting(int timeout) throws JMSException {
+    public String getGreeting(int timeout) throws JMSException, ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
         String greeting = NO_GREETING;
         // read a message from the topic destination
         Message message = messageConsumer.receive();
