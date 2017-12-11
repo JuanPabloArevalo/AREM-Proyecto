@@ -43,7 +43,8 @@ public class Controller {
 
         try {
 
-            SpringApplication.run(Controller.class, args);
+//            SpringApplication.run(Controller.class, args);
+            System.err.println("ENTRO ACA!!!!!!!!!!");
             Suscribe suscribe = new Suscribe();
             suscribe.create("publisher-multipleconsumers4", "publishsubscribe.t");
             try {
